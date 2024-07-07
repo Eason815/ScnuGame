@@ -79,12 +79,27 @@ public class GameLoad {
         em.addElement(play, GameElement.PLAY);
     }
 
-    public static void loadEnemy(){
+    public static void loadEnemy(int mode){
         loadObj();
-        for(int i =0;i<5;i++) {
-            ElementObj obj=getObj("enemy");
-            ElementObj enemy = obj.createElement("");
-            em.addElement(enemy, GameElement.ENEMY);
+        if (mode == 0) {
+
+            for (int i = 0; i < 5; i++) {
+                ElementObj obj = getObj("enemy");
+                ElementObj enemy = obj.createElement("right,1");
+                em.addElement(enemy, GameElement.ENEMY);
+            }
+        } else if (mode == 1) {
+            for (int i = 0; i < 5; i++) {
+                ElementObj obj = getObj("enemy");
+                ElementObj enemy = obj.createElement("right,1");
+                em.addElement(enemy, GameElement.ENEMY);
+            }
+            for (int i = 0; i < 5; i++) {
+                ElementObj obj = getObj("enemy");
+                ElementObj enemy = obj.createElement("up,2");
+                em.addElement(enemy, GameElement.ENEMY);
+            }
+
         }
     }
 

@@ -44,6 +44,7 @@ public class ElementManager {
         return gameElements.get(ge);
     }
 
+
     /*
      *单例模式 内存中有且只有一个实例
      * 饿汉模式：在类加载时就完成了初始化，所以类加载较慢，但获取对象的速度快。这是因为单例的实例在类加载时就已经创建。这种方式基于类加载机制，避免了多线程的同步问题。
@@ -78,6 +79,10 @@ public class ElementManager {
         }
     }
 
-
+    public void clearElements() {
+        for (GameElement ge : GameElement.values()) {
+            gameElements.get(ge).clear();
+        }
+    }
 
 }

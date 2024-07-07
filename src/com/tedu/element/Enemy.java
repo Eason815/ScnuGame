@@ -19,14 +19,18 @@ public class Enemy extends ElementObj {
 
     @Override
     public ElementObj createElement(String str) {
+        //str:
+        // 初始方向,移动方式(1左右，2上下),
 
+        String [] s1= str.split(",");
 
-        int x = new Random().nextInt(800);
-        int y = new Random().nextInt(600);
+        int x = new Random().nextInt(700);
+        int y = new Random().nextInt(500);
         this.setX(x);
         this.setY(y);
+        this.fx = s1[0];
 
-        ImageIcon icon2 = GameLoad.imgMap.get("right1");
+        ImageIcon icon2 = GameLoad.imgMap.get(this.fx+"1");
         this.setW(icon2.getIconWidth());
         this.setH(icon2.getIconHeight());
         this.setIcon(icon2);
@@ -46,8 +50,12 @@ public class Enemy extends ElementObj {
         if(GameTime%Num==0){
             if(Objects.equals(this.fx, "right"))
                 this.setFx("left");
-            else
+            else if (Objects.equals(this.fx, "left"))
                 this.setFx("right");
+            else if (Objects.equals(this.fx, "up"))
+                this.setFx("down");
+            else if (Objects.equals(this.fx, "down"))
+                this.setFx("up");
         }
 
         this.setIcon(GameLoad.imgMap.get(this.fx+"1"));
@@ -58,10 +66,12 @@ public class Enemy extends ElementObj {
 
         int x=this.getX();
         int y=this.getY();
-        if(x<0||y<0||x>800||y>600){
+        if(x<0||y<0||x>800||y>500){
             switch (this.fx){
-                case "right": this.setX(x-10);this.fx="left";break;
-                case "left": this.setX(x+10); this.fx="right";break;
+                case "right": this.setX(x-11);this.fx="left";break;
+                case "left": this.setX(x+11); this.fx="right";break;
+                case "up": this.setY(y+11); this.fx="down";break;
+                case "down": this.setY(y-11); this.fx="up";break;
             }
             return;
         }
@@ -69,6 +79,8 @@ public class Enemy extends ElementObj {
         switch (this.fx) {
             case "right": this.setX(this.getX() + this.speed);break;
             case "left": this.setX(this.getX() - this.speed);break;
+            case "up": this.setY(this.getY() - this.speed);break;
+            case "down": this.setY(this.getY() + this.speed);break;
         }
 
     }

@@ -9,6 +9,8 @@ import com.tedu.manager.GameElement;
 import com.tedu.manager.GameLoad;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +19,7 @@ public class GameThread extends Thread{
     private ElementManager em;
 
     public static int Score = 0;
+    public static int GameProcess = 0;
     public GameThread() {
         em = ElementManager.getManager();
     }
@@ -35,10 +38,11 @@ public class GameThread extends Thread{
 
     private void gameLoad() {
 
-        GameLoad.loadImg();
-        GameLoad.MapLoad(8);
-        GameLoad.loadPlay();
-        GameLoad.loadEnemy();
+                em.clearElements();
+                GameLoad.loadImg();
+                GameLoad.MapLoad(GameProcess+1);
+                GameLoad.loadPlay();
+                GameLoad.loadEnemy(GameProcess);
 
     }
 
@@ -52,26 +56,29 @@ public class GameThread extends Thread{
             List<ElementObj> maps = em.getElementsByKey(GameElement.MAPS);
             List<ElementObj> players = em.getElementsByKey(GameElement.PLAY);
 
+            if(CheckNoEnemy(all)){
+                break;
+            }
 
             UpdateThing(all, GameTime);
 
             CheckCrash(bullets, emeries);
             CheckCrash(bullets, maps);
 
-            CheckBorder(players, maps);
+//            CheckBorder(players, maps);
 
 
-            if(Score==5){
 
-            }
             GameTime++;
-
 
             try {
                 sleep(10);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+
+
+
         }
     }
 
@@ -122,9 +129,40 @@ public class GameThread extends Thread{
         }
     }
 
+    private static boolean CheckNoEnemy(Map<GameElement, List<ElementObj>> all) {
+        return all.get(GameElement.ENEMY).isEmpty();
+    }
+
+    private static void FiveSecondLoad(String inputStr) {
+        for (int i = 5; i > 0; i--) {
+            int remainingTime = i;
+            JOptionPane pane = new JOptionPane("您的得分为：" + Score + "\n"+inputStr+"\n剩余" + remainingTime + "秒",
+                    JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+
+            JDialog dialog = pane.createDialog("关卡倒计时");
+
+            Timer timer = new Timer(1000 , new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    dialog.dispose();
+                }
+            });
+
+            timer.setRepeats(false);
+            timer.start();
+            dialog.setVisible(true);
+        }
+    }
 
     private void gameOver() {
+        //显示游戏结束
+        switch (GameProcess++) {
 
+            case 0:   FiveSecondLoad("即将进入下一关"); break;
+            case 1:   FiveSecondLoad("游戏结束"); System.exit(0);
+
+        }
+//        GameProcess++;
 
     }
 
