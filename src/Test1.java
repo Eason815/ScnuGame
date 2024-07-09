@@ -1,12 +1,23 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
 public class Test1 {
 
     private static int score = 10;  // 示例分数
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(Test1::showCountdown);
+        int x = new Random().nextInt(700);
+        int y = new Random().nextInt(500);
+//        SwingUtilities.invokeLater(Test1::showCountdown);
+        System.out.println(x);
+        System.out.println(y);
+
+        x = new Random().nextInt(700);
+        y = new Random().nextInt(500);
+
+        System.out.println(x);
+        System.out.println(y);
     }
 
     private static void showCountdown() {

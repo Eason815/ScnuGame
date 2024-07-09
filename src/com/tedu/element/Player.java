@@ -6,8 +6,10 @@ import com.tedu.manager.GameLoad;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
+import java.util.Map;
 
-public class Play extends ElementObj {
+public class Player extends ElementObj {
 
     private boolean left = false;
     private boolean up = false;
@@ -17,13 +19,12 @@ public class Play extends ElementObj {
     private String fx="up";
     private boolean atk = false;
 
-    private int speed = 1;
+    private int speed=1;
 
 
-    public Play(){}
-    public Play(int x, int y, int w, int h, ImageIcon icon) {
+    public Player(){}
+    public Player(int x, int y, int w, int h, ImageIcon icon) {
         super(x,y,w,h,icon);
-
 
     }
 
@@ -51,6 +52,7 @@ public class Play extends ElementObj {
 //        System.out.println("keyClick000"+key);
 
         if(b1){
+            this.speed=1;
             switch(key){
                 case 37:
                     this.down=false; this.up=false;
@@ -84,20 +86,44 @@ public class Play extends ElementObj {
 
     @Override
     public void move(long gameTime) {
-        if(this.left && this.getX()>0){
-            this.setX(this.getX()-this.speed);
+        int newX = this.getX();
+        int newY = this.getY();
+
+        if (this.left && this.getX() > 0) {
+            newX -= this.speed;
         }
-        if(this.up && this.getY()>0){
-            this.setY(this.getY()-this.speed);
+        if (this.up && this.getY() > 0) {
+            newY -= this.speed;
         }
-        if(this.right && this.getX()<900-this.getW()){
-            this.setX(this.getX()+this.speed);
+        if (this.right && this.getX() < 900 - this.getW()) {
+            newX += this.speed;
         }
-        if(this.down &&this.getY()<570-this.getH()){
-            this.setY(this.getY()+this.speed);
+        if (this.down && this.getY() < 570 - this.getH()) {
+            newY += this.speed;
         }
 
+        // 碰撞检测
+        if (!checkCollision(newX, newY)) {
+            this.setX(newX);
+            this.setY(newY);
+        }
+    }
 
+    // 碰撞检测方法
+    private boolean checkCollision(int newX, int newY) {
+        // 获取所有墙体元素
+        ElementManager em=ElementManager.getManager();
+        Map<GameElement, List<ElementObj>> all = em.getGameElements();
+        List<ElementObj> maps = em.getElementsByKey(GameElement.MAPS);
+        for (ElementObj map : maps) {
+            if (newX < map.getX() + map.getIcon().getIconWidth() &&
+                    newX + this.getW() > map.getX() &&
+                    newY < map.getY() + map.getIcon().getIconHeight() &&
+                    newY + this.getH() > map.getY()) {
+                return true; // 发生碰撞
+            }
+        }
+        return false; // 没有发生碰撞
     }
 
     @Override
@@ -135,6 +161,11 @@ public class Play extends ElementObj {
         }
 
         return "x:"+x+",y:"+y+",fx:"+this.fx;
+    }
+
+    @Override
+    public void stopMovement() {
+        this.speed=0;
     }
 
 

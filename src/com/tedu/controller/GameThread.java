@@ -3,7 +3,6 @@ package com.tedu.controller;
 import com.tedu.element.Bullet;
 import com.tedu.element.ElementObj;
 import com.tedu.element.Enemy;
-import com.tedu.element.Play;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
 import com.tedu.manager.GameLoad;
@@ -20,6 +19,8 @@ public class GameThread extends Thread{
 
     public static int Score = 0;
     public static int GameProcess = 0;
+
+    public static int EndStat=0;
     public GameThread() {
         em = ElementManager.getManager();
     }
@@ -48,7 +49,7 @@ public class GameThread extends Thread{
 
     private void gameRun() {
         long GameTime = 0L;
-
+        EndStat=0;//初始化
         while(true) {
             Map<GameElement, List<ElementObj>> all = em.getGameElements();
             List<ElementObj> emeries = em.getElementsByKey(GameElement.ENEMY);
@@ -57,6 +58,12 @@ public class GameThread extends Thread{
             List<ElementObj> players = em.getElementsByKey(GameElement.PLAY);
 
             if(CheckNoEnemy(all)){
+                EndStat=1;//游戏胜利
+                break;
+            }
+
+            if(CheckNoPlayer(all)){
+                EndStat=2;//游戏失败
                 break;
             }
 
@@ -64,8 +71,8 @@ public class GameThread extends Thread{
 
             CheckCrash(bullets, emeries);
             CheckCrash(bullets, maps);
+            CheckCrash(players, emeries);
 
-//            CheckBorder(players, maps);
 
 
 
@@ -79,19 +86,6 @@ public class GameThread extends Thread{
 
 
 
-        }
-    }
-
-    //检测坦克与墙体碰撞
-    private static void CheckBorder(List<ElementObj> list1, List<ElementObj> list2){
-
-        for(ElementObj obj1 : list1) {
-            for (ElementObj obj2 : list2) {
-                if (obj1.isCash(obj2)) {
-
-                    break;
-                }
-            }
         }
     }
 
@@ -125,12 +119,17 @@ public class GameThread extends Thread{
                     continue;
                 }
                 obj.model(GameTime);
+                obj.updatePosition(); // 更新位置
             }
         }
     }
 
     private static boolean CheckNoEnemy(Map<GameElement, List<ElementObj>> all) {
         return all.get(GameElement.ENEMY).isEmpty();
+    }
+
+    private static boolean CheckNoPlayer(Map<GameElement, List<ElementObj>> all) {
+        return all.get(GameElement.PLAY).isEmpty();
     }
 
     private static void FiveSecondLoad(String inputStr) {
@@ -155,14 +154,26 @@ public class GameThread extends Thread{
     }
 
     private void gameOver() {
-        //显示游戏结束
-        switch (GameProcess++) {
 
-            case 0:   FiveSecondLoad("即将进入下一关"); break;
-            case 1:   FiveSecondLoad("游戏结束"); System.exit(0);
+        //显示游戏结束
+
+        if(EndStat==1) {
+            switch (GameProcess++) {
+
+                case 0:
+                    FiveSecondLoad("即将进入下一关");
+                    break;
+                case 1:
+                    FiveSecondLoad("游戏结束");
+                    System.exit(0);
+
+            }
+        } else if (EndStat==2) {
+            FiveSecondLoad("游戏失败 将重新开始第"+(GameProcess+1)+"关");
 
         }
-//        GameProcess++;
+        EndStat=0;
+
 
     }
 

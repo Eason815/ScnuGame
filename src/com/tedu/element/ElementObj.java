@@ -15,7 +15,7 @@ public abstract class ElementObj {
     private int h;
     private ImageIcon icon;
     private boolean live=true;
-    private int speed = 0;
+    protected int speed = 0;
 
 
     public ElementObj(){
@@ -123,5 +123,14 @@ public abstract class ElementObj {
 
     public void setSpeed(int speed) {
         this.speed = speed;
+    }
+
+    public void stopMovement() {
+        this.speed=0;
+    }
+
+    public void updatePosition() {
+        this.x += this.speed;
+        this.y += this.speed;
     }
 }

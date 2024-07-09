@@ -2,7 +2,6 @@ package com.tedu.show;
 
 import com.tedu.controller.GameThread;
 import com.tedu.element.ElementObj;
-import com.tedu.element.Play;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
 
@@ -41,6 +40,8 @@ public class GameMainJPanel extends JPanel implements Runnable{
         g.setColor(Color.black);
         g.setFont(new Font("黑体", Font.BOLD, 20));
         g.drawString("得分: " + GameThread.Score, 10, 30);
+        g.drawString("第"+(GameThread.GameProcess+1)+"关", 10, 60);
+
     }
 
     @Override
