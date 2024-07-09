@@ -2,5 +2,5 @@ package com.tedu.manager;
 
 
 public enum GameElement {
-    MAPS,PLAY,ENEMY,BOSS,BULLET
+    MAPS,PLAY,ENEMY,BOSS,BULLET,LASER
 }

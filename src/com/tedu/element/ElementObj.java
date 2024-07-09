@@ -129,8 +129,8 @@ public abstract class ElementObj {
         this.speed=0;
     }
 
-    public void updatePosition() {
-        this.x += this.speed;
-        this.y += this.speed;
-    }
+//    public void updatePosition() {
+//        this.x += this.speed;
+//        this.y += this.speed;
+//    }
 }

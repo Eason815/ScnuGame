@@ -14,7 +14,7 @@ public class Bullet extends ElementObj{
 
     @Override
     public ElementObj createElement(String str){
-        // {x:3,y:4,fx:up}
+        // {x:3,y:4,fx:up,speed:5}
         String [] s = str.split(",");
         for(String s1:s){
             String [] e1 = s1.split(":");
@@ -25,6 +25,8 @@ public class Bullet extends ElementObj{
                     this.setY(Integer.parseInt(e1[1])); break;
                 case "fx":
                     this.fx = e1[1]; break;
+                case "speed":
+                    this.speed = Integer.parseInt(e1[1]); break;
             }
 
         }

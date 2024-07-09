@@ -1,7 +1,12 @@
 package com.tedu.element;
 
+import com.tedu.controller.GameThread;
+import com.tedu.manager.ElementManager;
+import com.tedu.manager.GameElement;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
 public class MapObj extends ElementObj{
 
@@ -58,5 +63,19 @@ public class MapObj extends ElementObj{
     @Override
     public int getSpeed() {
         return speed;
+    }
+
+
+    @Override
+    public void die() {
+        super.die();
+        // 5%几率触发激光束
+        if (GameThread.GameProcess > 1 && new Random().nextInt(100) < 5) {
+            ElementManager em = ElementManager.getManager();
+            // 添加横向激光束
+            em.addElement(new Laser(this.getX(), this.getY(), true), GameElement.LASER);
+            // 添加纵向激光束
+            em.addElement(new Laser(this.getX(), this.getY(), false), GameElement.LASER);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.tedu.manager;
 
+import com.tedu.controller.GameThread;
 import com.tedu.element.ElementObj;
 import com.tedu.element.MapObj;
 
@@ -71,7 +72,9 @@ public class GameLoad {
 
     public static void loadPlay() {
         loadObj();
-        String playStr="500,500,up";
+        int [] hps = {1,1,2};
+        int hp = hps[GameThread.GameProcess];
+        String playStr="500,500,up,"+hp;
         ElementObj obj=getObj("play");
         ElementObj play = obj.createElement(playStr);
 //		ElementObj play = new Play().createElement(playStr);
@@ -89,6 +92,18 @@ public class GameLoad {
                 em.addElement(enemy, GameElement.ENEMY);
             }
         } else if (mode == 1) {
+            for (int i = 0; i < 5; i++) {
+                ElementObj obj = getObj("enemy");
+                ElementObj enemy = obj.createElement("right,1");
+                em.addElement(enemy, GameElement.ENEMY);
+            }
+            for (int i = 0; i < 5; i++) {
+                ElementObj obj = getObj("enemy");
+                ElementObj enemy = obj.createElement("up,2");
+                em.addElement(enemy, GameElement.ENEMY);
+            }
+
+        } else if (mode==2) {
             for (int i = 0; i < 5; i++) {
                 ElementObj obj = getObj("enemy");
                 ElementObj enemy = obj.createElement("right,1");

@@ -21,6 +21,8 @@ public class Player extends ElementObj {
 
     private int speed=1;
 
+    private int hp = 5;
+
 
     public Player(){}
     public Player(int x, int y, int w, int h, ImageIcon icon) {
@@ -31,10 +33,13 @@ public class Player extends ElementObj {
 
     @Override
     public ElementObj createElement(String str){
+        //{x,y,icon,hp}
+
         String [] split = str.split(",");
         this.setX(Integer.parseInt(split[0]));
         this.setY(Integer.parseInt(split[1]));
         ImageIcon icon2 = GameLoad.imgMap.get(split[2]);
+        this.hp = split.length>3?Integer.parseInt(split[3]):5;
         this.setW(icon2.getIconWidth());
         this.setH(icon2.getIconHeight());
         this.setIcon(icon2);
@@ -45,6 +50,12 @@ public class Player extends ElementObj {
     public void showElement(Graphics g){
 
         g.drawImage(this.getIcon().getImage(),this.getX(),this.getY(),this.getW(),this.getH(),null);
+
+        // 血量
+        g.setColor(Color.RED);
+//            g.drawRect(this.getX(),this.getY()-10,this.getW(),10);
+//            g.fillRect(this.getX(),this.getY()-10,this.getW()*hp/5,10);
+        g.drawString("hp:"+hp,this.getX()+5,this.getY()-10);
     }
 
     @Override
@@ -168,5 +179,14 @@ public class Player extends ElementObj {
         this.speed=0;
     }
 
+    @Override
+    public void setLive(boolean live){
 
+            this.hp--;
+            if(this.hp>0){
+                return;
+            }
+
+        super.setLive(live);
+    }
 }

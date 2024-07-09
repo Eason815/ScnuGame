@@ -57,7 +57,10 @@ public class Enemy extends ElementObj {
     @Override
     public void updateImg(long GameTime){
 
-        int Num =new Random().nextInt(10,1000);
+        int min = 10;
+        int max = 100;
+
+        int Num =new Random().nextInt(max - min + 1) + min;
 
 
         if(GameTime%Num==0){

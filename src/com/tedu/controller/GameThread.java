@@ -99,7 +99,6 @@ public class GameThread extends Thread{
                     obj1.setLive(false);
                     if(obj1 instanceof Bullet && obj2 instanceof Enemy) {
                         Score++;
-                        System.out.println(Score);
                     }
                     break;
                 }
@@ -119,7 +118,7 @@ public class GameThread extends Thread{
                     continue;
                 }
                 obj.model(GameTime);
-                obj.updatePosition(); // 更新位置
+
             }
         }
     }
@@ -160,10 +159,10 @@ public class GameThread extends Thread{
         if(EndStat==1) {
             switch (GameProcess++) {
 
-                case 0:
+                case 0, 1:
                     FiveSecondLoad("即将进入下一关");
                     break;
-                case 1:
+                case 2:
                     FiveSecondLoad("游戏结束");
                     System.exit(0);
 
@@ -172,6 +171,7 @@ public class GameThread extends Thread{
             FiveSecondLoad("游戏失败 将重新开始第"+(GameProcess+1)+"关");
 
         }
+        Score=0;
         EndStat=0;
 
 
