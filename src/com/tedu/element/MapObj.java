@@ -13,7 +13,7 @@ public class MapObj extends ElementObj{
     private int hp;
 
     private String name;
-    private final int speed=0;
+//    private final int speed=0;
 
 
     public void showElement(Graphics g){
@@ -29,11 +29,18 @@ public class MapObj extends ElementObj{
         String [] arr = str.split(",");
         ImageIcon icon = null;
         switch(arr[0]){
-            case "GRASS":icon = new ImageIcon("image/wall/grass.png"); break;
-            case "BRICK":icon = new ImageIcon("image/wall/brick.png"); break;
-            case "RIVER":icon = new ImageIcon("image/wall/river.png"); break;
+            case "GRASS":icon = new ImageIcon("image/wall/grass.png");
+                    name = "GRASS";
+                    break;
+            case "BRICK":icon = new ImageIcon("image/wall/brick.png");
+                    name = "BRICK";
+                    break;
+            case "RIVER":icon = new ImageIcon("image/wall/river.png");
+                    this.hp = 999999;
+                    name = "RIVER";
+                    break;
             case "IRON":icon = new ImageIcon("image/wall/iron.png");
-                    this.hp=4;
+                    this.hp = 4;
                     name = "IRON";
                     break;
         }
@@ -51,11 +58,14 @@ public class MapObj extends ElementObj{
 
     @Override
     public void setLive(boolean live){
-        if("IRON".equals(name)){
+        if("IRON".equals(name) || "RIVER".equals(name)){
             this.hp--;
             if(this.hp>0){
                 return;
             }
+
+
+
         }
         super.setLive(live);
     }
@@ -65,17 +75,30 @@ public class MapObj extends ElementObj{
         return speed;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @Override
     public void die() {
         super.die();
+        int RanNum = new Random().nextInt(100);
+        ElementManager em = ElementManager.getManager();
+
         // 5%几率触发激光束
-        if (GameThread.GameProcess > 1 && new Random().nextInt(100) < 5) {
-            ElementManager em = ElementManager.getManager();
+        if (GameThread.GameProcess > 1 && RanNum < 5) {
             // 添加横向激光束
             em.addElement(new Laser(this.getX(), this.getY(), true), GameElement.LASER);
             // 添加纵向激光束
             em.addElement(new Laser(this.getX(), this.getY(), false), GameElement.LASER);
+        } else if (RanNum < 10) { // 5%几率
+            Item item = new Item(this.getX(), this.getY(),this.getW(),this.getH(), Item.ItemType.HEALTH);
+            em.addElement(item, GameElement.ITEM);
         }
+
     }
 }

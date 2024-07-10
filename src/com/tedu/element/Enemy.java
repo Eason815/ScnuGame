@@ -14,7 +14,7 @@ import java.util.Random;
 
 public class Enemy extends ElementObj {
 
-    private int speed=1;
+//    private int speed = 1;
     private String fx="right";
 
     @Override
@@ -47,9 +47,6 @@ public class Enemy extends ElementObj {
         this.fx = s1[0];
 
 
-
-
-
         return this;
 
     }
@@ -80,17 +77,19 @@ public class Enemy extends ElementObj {
     @Override
     public void move(long GameTime){
 
+        this.speed=1;
+
         int x=this.getX();
         int y=this.getY();
-        if(x<0||y<0||x>800||y>500){
-            switch (this.fx){
-                case "right": this.setX(x-11);this.fx="left";break;
-                case "left": this.setX(x+11); this.fx="right";break;
-                case "up": this.setY(y+11); this.fx="down";break;
-                case "down": this.setY(y-11); this.fx="up";break;
-            }
-            return;
-        }
+//        if(x<0||y<0||x>800||y>500){
+//            switch (this.fx){
+//                case "right": this.setX(x-11);this.fx="left";break;
+//                case "left": this.setX(x+11); this.fx="right";break;
+//                case "up": this.setY(y+11); this.fx="down";break;
+//                case "down": this.setY(y-11); this.fx="up";break;
+//            }
+//            return;
+//        }
 
         switch (this.fx) {
             case "right": x += this.speed;break;
@@ -100,7 +99,7 @@ public class Enemy extends ElementObj {
         }
 
         // 碰撞检测
-        if (!checkCollision(x, y)) {
+        if (!checkCollision(x, y)  &&  !(x<0||y<0||x>800||y>500) ) {
             this.setX(x);
             this.setY(y);
         }

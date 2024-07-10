@@ -16,6 +16,7 @@ public abstract class ElementObj {
     private ImageIcon icon;
     private boolean live=true;
     protected int speed = 0;
+    protected String name="ElementObj";
 
 
     public ElementObj(){
@@ -123,6 +124,15 @@ public abstract class ElementObj {
 
     public void setSpeed(int speed) {
         this.speed = speed;
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void stopMovement() {

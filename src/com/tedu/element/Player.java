@@ -19,9 +19,9 @@ public class Player extends ElementObj {
     private String fx="up";
     private boolean atk = false;
 
-    private int speed=1;
-
     private int hp = 5;
+
+    private int bulletsNum = 999999;
 
 
     public Player(){}
@@ -56,6 +56,7 @@ public class Player extends ElementObj {
 //            g.drawRect(this.getX(),this.getY()-10,this.getW(),10);
 //            g.fillRect(this.getX(),this.getY()-10,this.getW()*hp/5,10);
         g.drawString("hp:"+hp,this.getX()+5,this.getY()-10);
+        g.drawString("bl:"+bulletsNum,this.getX(),this.getY()+50);
     }
 
     @Override
@@ -78,7 +79,9 @@ public class Player extends ElementObj {
                     this.left=false; this.right=false;
                     this.up=false; this.down=true; fx="down"; break;
                 case 32:
-                    this.atk=true; break;
+                    if (bulletsNum>0)
+                        this.atk=true;
+                    break;
             }
         }
         else{
@@ -87,7 +90,11 @@ public class Player extends ElementObj {
                 case 38: this.up=false; break;
                 case 39: this.right=false; break;
                 case 40: this.down=false; break;
-                case 32: this.atk=false; break;
+                case 32:
+                    if (bulletsNum>0) {
+                        this.atk = false;
+                        this.bulletsNum--;
+                    }break;
             }
         }
 
@@ -118,6 +125,25 @@ public class Player extends ElementObj {
             this.setX(newX);
             this.setY(newY);
         }
+
+
+        // 检测是否拾取道具
+        List<ElementObj> items = ElementManager.getManager().getElementsByKey(GameElement.ITEM);
+        for (ElementObj item : items) {
+            if (this.isCash(item) && item.isLive()) {
+                Item pickedItem = (Item) item;
+                switch (pickedItem.getType()) {
+                    case HEALTH:
+                        this.increaseHP(1);
+                        break;
+                }
+                item.setLive(false); // 道具被拾取后消失
+            }
+        }
+    }
+
+    private void increaseHP(int i) {
+        this.hp+=i;
     }
 
     // 碰撞检测方法
@@ -130,7 +156,10 @@ public class Player extends ElementObj {
             if (newX < map.getX() + map.getIcon().getIconWidth() &&
                     newX + this.getW() > map.getX() &&
                     newY < map.getY() + map.getIcon().getIconHeight() &&
-                    newY + this.getH() > map.getY()) {
+                    newY + this.getH() > map.getY() &&
+                    !(map.getName().equals("GRASS"))
+
+            ) {
                 return true; // 发生碰撞
             }
         }

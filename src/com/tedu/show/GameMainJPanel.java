@@ -7,8 +7,11 @@ import com.tedu.manager.GameElement;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameMainJPanel extends JPanel implements Runnable{
     private ElementManager em;
@@ -25,15 +28,21 @@ public class GameMainJPanel extends JPanel implements Runnable{
     public void paint(Graphics g){
         super.paint(g);
 
-        Map<GameElement, List<ElementObj>> all = em.getGameElements();
+//        Map<GameElement, List<ElementObj>> all = em.getGameElements();
 
-        for(GameElement ge : GameElement.values()){
+        // 创建集合的副本
+        Map<GameElement, List<ElementObj>> all = new HashMap<>();
+        for (GameElement ge : GameElement.values()) {
+            List<ElementObj> originalList = em.getGameElements().get(ge);
+            List<ElementObj> copyList = new ArrayList<>(originalList);
+            all.put(ge, copyList);
+        }
+
+        for (GameElement ge : GameElement.values()) {
             List<ElementObj> list = all.get(ge);
-
             for (ElementObj obj : list) {
-                obj.showElement(g);
+                obj.showElement(g); // 调用showElement方法渲染元素
             }
-
         }
 
         // 左上角显示得分

@@ -5,7 +5,7 @@ import java.awt.*;
 public class Bullet extends ElementObj{
 
     private int attack=1;
-    private int speed=3;
+//    private int speed=3;
 
     public String fx;
 
@@ -48,6 +48,8 @@ public class Bullet extends ElementObj{
 
     @Override
     protected void move(long gameTime){
+
+        this.speed = 3;
 
         int x=this.getX();
         int y=this.getY();
