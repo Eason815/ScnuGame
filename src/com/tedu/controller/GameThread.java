@@ -1,12 +1,10 @@
 package com.tedu.controller;
 
-import com.tedu.element.Bullet;
-import com.tedu.element.ElementObj;
-import com.tedu.element.Enemy;
-import com.tedu.element.MapObj;
+import com.tedu.element.*;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
 import com.tedu.manager.GameLoad;
+import com.tedu.show.GameJFrame;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -24,20 +22,21 @@ public class GameThread extends Thread{
     public static int GameProcess = 2;
 
     public static int EndStat=0;
-    public GameThread() {
+    public GameThread(int Process) {
+        GameProcess = Process;
+        Score = 0;
+        EndStat = 0;
         em = ElementManager.getManager();
     }
 
     @Override
     public void run() {
-        while (true){
             //游戏开始前
             gameLoad();
             //游戏进行时
             gameRun();
             //游戏场景结束
             gameOver();
-        }
     }
 
     private void gameLoad() {
@@ -83,7 +82,7 @@ public class GameThread extends Thread{
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            if(CheckNoPlayer(all)){
+            if(CheckFailed(all)){
                 EndStat=2;//游戏失败
                 break;
             }
@@ -136,8 +135,30 @@ public class GameThread extends Thread{
         return all.get(GameElement.ENEMY).isEmpty();
     }
 
-    private static boolean CheckNoPlayer(Map<GameElement, List<ElementObj>> all) {
-        return all.get(GameElement.PLAY).isEmpty();
+    private static boolean CheckFailed(Map<GameElement, List<ElementObj>> all) {
+        List<ElementObj> player = all.get(GameElement.PLAY);
+        if (player.isEmpty())
+            return true;
+
+        for(ElementObj obj: player) {
+            if(!(obj instanceof Player object))
+                break;
+            if (object.getBulletsNum()==0)
+                return true;
+        }
+
+        return false;
+    }
+
+
+    private void InfoAndGoal(){
+        Object[] options = { "确定" };
+        JOptionPane.showOptionDialog(null, "第"+(GameProcess+1)+"关" + "\n"
+                        + "击碎墙体有5%掉落血包" + "\n"
+                        + "目标:存活并击败所有敌人" + "\n"
+                        + " ", "游戏说明",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                null, options, null);
     }
 
     private static void FiveSecondLoad(String inputStr) {
@@ -165,35 +186,32 @@ public class GameThread extends Thread{
 
         //显示游戏结束
 
-        if(EndStat==1) {
-            switch (GameProcess++) {
+//        if(EndStat==1) {
+//            switch (GameProcess++) {
+//
+//                case 0:
+//                    FiveSecondLoad("即将进入下一关\n敌人增多");
+//                    break;
+//                case 1:
+//                    FiveSecondLoad("即将进入下一关\n激光束");
+//                    break;
+//
+//                case 2:
+//                    FiveSecondLoad("游戏结束");
+//                    System.exit(0);
+//
+//            }
+//        } else if (EndStat==2) {
+//            FiveSecondLoad("游戏失败 将重新开始第"+(GameProcess+1)+"关");
+//
+//        }
+        // 清空元素管理器
+        ElementManager.getManager().clearAll();
+        GameJFrame.setJPanel("OverJPanel");
 
-                case 0:
-                    FiveSecondLoad("即将进入下一关\n敌人增多");
-                    break;
-                case 1:
-                    FiveSecondLoad("即将进入下一关\n激光束");
-                    break;
-                case 11:
-                    FiveSecondLoad("即将进入下一关\n激光束");
-                    break;
-                case 12:
-                    FiveSecondLoad("即将进入下一关\n激光束");
-                    break;
-                case 13:
-                    FiveSecondLoad("即将进入下一关\n激光束");
-                    break;
-                case 2:
-                    FiveSecondLoad("游戏结束");
-                    System.exit(0);
 
-            }
-        } else if (EndStat==2) {
-            FiveSecondLoad("游戏失败 将重新开始第"+(GameProcess+1)+"关");
-
-        }
-        Score=0;
-        EndStat=0;
+//        Score=0;
+//        EndStat=0;
 
 
     }

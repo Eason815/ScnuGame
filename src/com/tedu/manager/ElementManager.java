@@ -2,10 +2,7 @@ package com.tedu.manager;
 
 import com.tedu.element.ElementObj;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * &#064;说明  本类是元素管理器 专门存储所有的元素，同时，提供方法
@@ -85,4 +82,10 @@ public class ElementManager {
         }
     }
 
+    public void clearAll() {
+        Set<GameElement> keySet = gameElements.keySet();
+        for (GameElement ge : keySet) {
+            gameElements.get(ge).clear();
+        }
+    }
 }

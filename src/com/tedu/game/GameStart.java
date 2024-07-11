@@ -25,16 +25,18 @@ import com.tedu.show.GameMainJPanel;
 
 public class GameStart {
     public static void main(String[] args) {
-        GameJFrame gj = new GameJFrame();
-        GameMainJPanel jm = new GameMainJPanel();
-        GameListener gl = new GameListener();
-        GameThread th = new GameThread();
+//        GameJFrame gj = new GameJFrame();
+//        GameMainJPanel jm = new GameMainJPanel();
+//        GameListener gl = new GameListener();
+//        GameThread th = new GameThread();
+//
+//        gj.setJPanel(jm);
+//        gj.setKeyListener(gl);
+//        gj.setThread(th);
+//
+//        gj.start();
 
-        gj.setJPanel(jm);
-        gj.setKeyListener(gl);
-        gj.setThread(th);
-
-        gj.start();
+        GameJFrame.setJPanel("MainJPanel");
 
 
     }
