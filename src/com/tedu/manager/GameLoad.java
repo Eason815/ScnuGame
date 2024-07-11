@@ -3,11 +3,14 @@ package com.tedu.manager;
 import com.tedu.controller.GameThread;
 import com.tedu.element.ElementObj;
 import com.tedu.element.MapObj;
+import com.tedu.element.Mask;
 
 import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+
+
 
 public class GameLoad {
 
@@ -118,6 +121,14 @@ public class GameLoad {
             }
 
         }
+    }
+
+    public static void loadMask(){
+            loadObj();
+            ElementObj obj = getObj("mask");
+            String build = "400,400"+","+ Mask.wid + "," +Mask.wid;
+            ElementObj mask = obj.createElement(build);
+            em.addElement(mask, GameElement.MASK);
     }
 
     public static ElementObj getObj(String str) {

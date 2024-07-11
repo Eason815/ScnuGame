@@ -46,6 +46,8 @@ public class GameThread extends Thread{
         GameLoad.MapLoad(GameProcess + 1);
         GameLoad.loadPlay();
         GameLoad.loadEnemy(GameProcess);
+        if(GameProcess>1)
+            GameLoad.loadMask();
 
     }
 
@@ -134,8 +136,20 @@ public class GameThread extends Thread{
             }
             list.removeAll(toRemove); // 统一删除元素
         }
-    }
 
+        List<ElementObj> player = all.get(GameElement.PLAY);
+        List<ElementObj> masks = all.get(GameElement.MASK);
+        for (ElementObj obj : player) {
+            for (ElementObj mask : masks) {
+                if ((obj instanceof Player p1) && (mask instanceof Mask m1)) {
+                    m1.setX(p1.getX()-Mask.wid/2);
+                    m1.setY(p1.getY()-Mask.wid/2);
+//                    System.out.println(1111);
+                }
+            }
+        }
+
+    }
     private static boolean CheckNoEnemy(Map<GameElement, List<ElementObj>> all) {
         return all.get(GameElement.ENEMY).isEmpty();
     }
@@ -159,9 +173,9 @@ public class GameThread extends Thread{
     private void InfoAndGoal(){
         Object[] options = { "确定" };
 
-        String [] Info = {"1 击碎墙体有5%掉落血包","\n2 击碎墙体有5%触发激光束陷阱","\n3 弹药紧缺!"};
+        String [] Info = {"1 击碎墙体有5%掉落血包","\n2 击碎墙体有5%触发激光束陷阱","\n3 弹药紧缺 视野受阻!"};
         StringBuilder Info1= new StringBuilder();
-        for (int i = 0;i<GameProcess;i++)
+        for (int i = 0;i<GameProcess+1;i++)
             Info1.append(Info[i]);
 
         String [] Goals = {"存活并击败所有敌人","得分30"};

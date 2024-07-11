@@ -41,7 +41,8 @@ public class GameMainJPanel extends JPanel implements Runnable{
         for (GameElement ge : GameElement.values()) {
             List<ElementObj> list = all.get(ge);
             for (ElementObj obj : list) {
-                obj.showElement(g); // 调用showElement方法渲染元素
+                if(obj!=null)
+                    obj.showElement(g); // 调用showElement方法渲染元素
             }
         }
 
