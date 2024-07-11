@@ -73,8 +73,10 @@ public class GameLoad {
     public static void loadPlay() {
         loadObj();
         int [] hps = {1,1,2};
-        int hp = hps[GameThread.GameProcess];
-        String playStr="500,500,up,"+hp;
+        int [] bls = {10000,10000,30};
+        String playStr="500,500,up,"+
+                hps[GameThread.GameProcess]+","+
+                bls[GameThread.GameProcess];
         ElementObj obj=getObj("play");
         ElementObj play = obj.createElement(playStr);
 //		ElementObj play = new Play().createElement(playStr);

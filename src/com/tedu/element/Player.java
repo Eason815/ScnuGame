@@ -21,25 +21,26 @@ public class Player extends ElementObj {
 
     private int hp = 5;
 
-    private int bulletsNum = 999999;
+    private int bulletsNum = 10000;
 
-    public Player() {
-    }
 
+    public Player(){}
     public Player(int x, int y, int w, int h, ImageIcon icon) {
         super(x, y, w, h, icon);
 
     }
 
+
     @Override
-    public ElementObj createElement(String str) {
-        // {x,y,icon,hp}
+    public ElementObj createElement(String str){
+        //{x,y,icon,hp,bl}
 
         String[] split = str.split(",");
         this.setX(Integer.parseInt(split[0]));
         this.setY(Integer.parseInt(split[1]));
-        ImageIcon icon2 = GameLoad.imgMap.get(split[2]);
-        this.hp = split.length > 3 ? Integer.parseInt(split[3]) : 5;
+        ImageIcon icon2 = split.length>2?GameLoad.imgMap.get(split[2]):GameLoad.imgMap.get("up1");
+        this.hp = split.length>3?Integer.parseInt(split[3]):5;
+        this.bulletsNum = split.length>4?Integer.parseInt(split[4]):10000;
         this.setW(icon2.getIconWidth());
         this.setH(icon2.getIconHeight());
         this.setIcon(icon2);
@@ -121,6 +122,8 @@ public class Player extends ElementObj {
                     break;
             }
         }
+
+
 
     }
 
@@ -243,5 +246,13 @@ public class Player extends ElementObj {
         }
 
         super.setLive(live);
+    }
+
+    public int getBulletsNum() {
+        return bulletsNum;
+    }
+
+    public void setBulletsNum(int bulletsNum) {
+        this.bulletsNum = bulletsNum;
     }
 }

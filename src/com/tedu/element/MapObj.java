@@ -89,8 +89,8 @@ public class MapObj extends ElementObj{
         int RanNum = new Random().nextInt(100);
         ElementManager em = ElementManager.getManager();
 
-        // 5%几率触发激光束
-        if (GameThread.GameProcess > 1 && RanNum < 5) {
+        // 5%几率触发激光束(第二关开始启用)
+        if (GameThread.GameProcess > 0 && RanNum < 5) {
             // 添加横向激光束
             em.addElement(new Laser(this.getX(), this.getY(), true), GameElement.LASER);
             // 添加纵向激光束

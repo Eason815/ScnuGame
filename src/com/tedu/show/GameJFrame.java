@@ -1,5 +1,8 @@
 package com.tedu.show;
 
+import com.tedu.controller.GameListener;
+import com.tedu.controller.GameThread;
+
 import javax.swing.*;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
@@ -12,7 +15,21 @@ public class GameJFrame extends JFrame {
     private KeyListener keyListener=null;
     private MouseListener mouseListener=null;
     private MouseMotionListener mouseMotionListener=null;
-    private Thread thead=null;
+    private Thread thread =null;
+
+
+
+    public static GameJFrame gj = new GameJFrame();
+    // 主面板
+    public static StartJPanel startjp;
+    // 挑选地图面板
+    public static LevelSelectJPanel leveljp;
+    // 游戏面板
+    public static GameMainJPanel mainjp;
+    // 结束面板
+    public static OverJPanel overjp;
+
+
 
     public GameJFrame() {
         init();
@@ -25,33 +42,79 @@ public class GameJFrame extends JFrame {
         this.setLocationRelativeTo(null);//居中
     }
 
-    public void start(){
-        if(jPanel!=null) {
-            this.add(jPanel);
-        }
-        if(keyListener !=null) {
-            this.addKeyListener(keyListener);
-        }
-        if(thead !=null) {
-            thead.start();//启动线程
-        }
-        this.setVisible(true);//显示界面
-//		如果jp 是 runnable的 子类实体对象
-//		如果这个判定无法进入就是 instanceof判定为 false 那么 jpanel没有实现runnable接口
-        if(this.jPanel instanceof Runnable) {
-//			已经做类型判定，强制类型转换不会出错
-//			new Thread((Runnable)this.jPanel).start();
-            Runnable run=(Runnable)this.jPanel;
-            Thread th=new Thread(run);
-            th.start();//
-        }
 
 
+    public static void setJPanel(String Name) {
+        if (Name.equals("MainJPanel")) {
+            startjp = new StartJPanel();
+            gj.setjPanel(startjp);
+            gj.start();
+        }
+        if (Name.equals("SelectJPanel")) {
+            leveljp = new LevelSelectJPanel();
+            gj.setjPanel(leveljp);
+            gj.start();
+        }
+        if (Name.equals("GameMainJPanel")) {
+            // 实例化监听
+            GameListener listener = new GameListener();
+            // 实例化主线程
+            GameThread th = new GameThread(GameThread.GameProcess);
+
+            mainjp = new GameMainJPanel();
+            gj.setjPanel(mainjp);
+            gj.setKeyListener(listener);
+            gj.setThread(th);
+            gj.start();
+            gj.setFocusable(true);
+        }
+        if (Name.equals("OverJPanel")) {
+            overjp = new OverJPanel();
+            gj.setjPanel(overjp);
+            gj.setThread(null);
+            gj.start();
+        }
+        gj.setVisible(false);
+        gj.setVisible(true);
     }
 
 
-    public void setJPanel(JPanel jPanel) {
+
+
+    public void setjPanel(JPanel jPanel) {
+        if (this.jPanel != null) {
+            this.remove(this.jPanel);
+        }
         this.jPanel = jPanel;
+    }
+
+
+    // 窗体启动方法
+    public void start() {
+        if (jPanel != null) {
+            this.add(jPanel);
+        }
+        if (keyListener != null) {
+            this.addKeyListener(keyListener);
+        }
+        if (mouseMotionListener != null) {
+            this.addMouseMotionListener(mouseMotionListener);
+        }
+        if (mouseListener != null) {
+            this.addMouseListener(mouseListener);
+        }
+        if (thread != null) {
+            System.out.println();
+            thread.start();
+        }
+        // 界面刷新，显示窗体
+        this.setVisible(true);
+
+        // 做了类型判断，强制类型不会出错
+        if (jPanel instanceof Runnable) {
+            // 启动子线程来不断刷新界面
+            new Thread((Runnable) jPanel).start();
+        }
     }
 
     public void setKeyListener(KeyListener keyListener) {
@@ -67,7 +130,7 @@ public class GameJFrame extends JFrame {
     }
 
     public void setThread(Thread thread) {
-        this.thead = thread;
+        this.thread = thread;
     }
 
 

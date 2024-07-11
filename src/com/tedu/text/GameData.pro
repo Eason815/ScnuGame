@@ -7,3 +7,7 @@ left1=image/tank/bot/bot_left.png
 down1=image/tank/bot/bot_down.png
 right1=image/tank/bot/bot_right.png
 up1=image/tank/bot/bot_up.png
+
+ground = image/icon.png
+button = image/button.png
+beach = image/beach.png
