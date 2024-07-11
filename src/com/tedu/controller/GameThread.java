@@ -16,65 +16,62 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class GameThread extends Thread{
+public class GameThread extends Thread {
 
     private ElementManager em;
 
     public static int Score = 0;
     public static int GameProcess = 2;
 
-    public static int EndStat=0;
+    public static int EndStat = 0;
+
     public GameThread() {
         em = ElementManager.getManager();
     }
 
     @Override
     public void run() {
-        while (true){
-            //游戏开始前
+        while (true) {
+            // 游戏开始前
             gameLoad();
-            //游戏进行时
+            // 游戏进行时
             gameRun();
-            //游戏场景结束
+            // 游戏场景结束
             gameOver();
         }
     }
 
     private void gameLoad() {
 
-                em.clearElements();
-                GameLoad.loadImg();
-                GameLoad.MapLoad(GameProcess+1);
-                GameLoad.loadPlay();
-                GameLoad.loadEnemy(GameProcess);
+        em.clearElements();
+        GameLoad.loadImg();
+        GameLoad.MapLoad(GameProcess + 1);
+        GameLoad.loadPlay();
+        GameLoad.loadEnemy(GameProcess);
 
     }
 
     private void gameRun() {
         long GameTime = 0L;
-        EndStat=0;//初始化
-        while(true) {
+        EndStat = 0;// 初始化
+        while (true) {
             Map<GameElement, List<ElementObj>> all = em.getGameElements();
             List<ElementObj> emeries = em.getElementsByKey(GameElement.ENEMY);
             List<ElementObj> bullets = em.getElementsByKey(GameElement.BULLET);
             List<ElementObj> maps = em.getElementsByKey(GameElement.MAPS);
             List<ElementObj> players = em.getElementsByKey(GameElement.PLAY);
 
-            if(CheckNoEnemy(all)){
-                EndStat=1;//游戏胜利
+            if (CheckNoEnemy(all)) {
+                EndStat = 1;// 游戏胜利
                 break;
             }
-
-
 
             UpdateThing(all, GameTime);
 
             CheckCrash(bullets, emeries);
+            CheckCrash(bullets, players);
             CheckCrash(bullets, maps);
             CheckCrash(players, emeries);
-
-
-
 
             GameTime++;
 
@@ -83,29 +80,30 @@ public class GameThread extends Thread{
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            if(CheckNoPlayer(all)){
-                EndStat=2;//游戏失败
+            if (CheckNoPlayer(all)) {
+                EndStat = 2;// 游戏失败
                 break;
             }
-
 
         }
     }
 
-
-
     private static void CheckCrash(List<ElementObj> list1, List<ElementObj> list2) {
-        for(ElementObj obj1 : list1) {
+        for (ElementObj obj1 : list1) {
             for (ElementObj obj2 : list2) {
-                if(obj2 instanceof MapObj){
-                    if(obj2.getName().equals("GRASS"))
+                if (obj2 instanceof MapObj) {
+                    if (obj2.getName().equals("GRASS") || obj2.getName().equals("RIVER"))
                         continue;
                 }
 
                 if (obj1.isCash(obj2)) {
+                    // 敌人发射的子弹击中敌人 忽略掉
+                    if (obj1 instanceof Bullet && obj2 instanceof Enemy && !((Bullet) obj1).isFromPlayer()) {
+                        continue;
+                    }
                     obj2.setLive(false);
                     obj1.setLive(false);
-                    if(obj1 instanceof Bullet && obj2 instanceof Enemy) {
+                    if (obj1 instanceof Bullet && obj2 instanceof Enemy) {
                         Score++;
                     }
                     break;
@@ -119,7 +117,7 @@ public class GameThread extends Thread{
             List<ElementObj> list = all.get(ge);
             List<ElementObj> toRemove = new ArrayList<>(); // 暂存需要删除的元素
             // 不能用for each
-            for(int i=list.size()-1;i>=0;i--){
+            for (int i = list.size() - 1; i >= 0; i--) {
                 ElementObj obj = list.get(i);
                 if (!obj.isLive()) {
                     obj.die();
@@ -143,12 +141,12 @@ public class GameThread extends Thread{
     private static void FiveSecondLoad(String inputStr) {
         for (int i = 5; i > 0; i--) {
             int remainingTime = i;
-            JOptionPane pane = new JOptionPane("您的得分为：" + Score +"\n剩余" + remainingTime + "秒"+ "\n"+inputStr,
-                    JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+            JOptionPane pane = new JOptionPane("您的得分为：" + Score + "\n剩余" + remainingTime + "秒" + "\n" + inputStr,
+                    JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[] {}, null);
 
             JDialog dialog = pane.createDialog("关卡倒计时");
 
-            Timer timer = new Timer(1000 , new ActionListener() {
+            Timer timer = new Timer(1000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     dialog.dispose();
@@ -163,9 +161,9 @@ public class GameThread extends Thread{
 
     private void gameOver() {
 
-        //显示游戏结束
+        // 显示游戏结束
 
-        if(EndStat==1) {
+        if (EndStat == 1) {
             switch (GameProcess++) {
 
                 case 0:
@@ -188,16 +186,13 @@ public class GameThread extends Thread{
                     System.exit(0);
 
             }
-        } else if (EndStat==2) {
-            FiveSecondLoad("游戏失败 将重新开始第"+(GameProcess+1)+"关");
+        } else if (EndStat == 2) {
+            FiveSecondLoad("游戏失败 将重新开始第" + (GameProcess + 1) + "关");
 
         }
-        Score=0;
-        EndStat=0;
-
+        Score = 0;
+        EndStat = 0;
 
     }
-
-
 
 }
