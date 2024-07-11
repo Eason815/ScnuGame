@@ -99,6 +99,7 @@ public class Player extends ElementObj {
                     if (bulletsNum > 0)
                         this.atk = true;
                     break;
+
             }
         } else {
             switch (key) {
@@ -119,6 +120,9 @@ public class Player extends ElementObj {
                         this.atk = false;
                         this.bulletsNum--;
                     }
+                    break;
+                case 27:
+                    this.setLive(false);
                     break;
             }
         }

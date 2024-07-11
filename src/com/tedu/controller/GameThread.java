@@ -52,6 +52,8 @@ public class GameThread extends Thread{
     private void gameRun() {
         long GameTime = 0L;
         EndStat = 0;// 初始化
+        InfoAndGoal();
+
         while (true) {
             Map<GameElement, List<ElementObj>> all = em.getGameElements();
             List<ElementObj> emeries = em.getElementsByKey(GameElement.ENEMY);
@@ -156,9 +158,18 @@ public class GameThread extends Thread{
 
     private void InfoAndGoal(){
         Object[] options = { "确定" };
+
+        String [] Info = {"1 击碎墙体有5%掉落血包","\n2 击碎墙体有5%触发激光束陷阱","\n3 弹药紧缺!"};
+        StringBuilder Info1= new StringBuilder();
+        for (int i = 0;i<GameProcess;i++)
+            Info1.append(Info[i]);
+
+        String [] Goals = {"存活并击败所有敌人","得分30"};
+        String s1 = GameProcess==4?Goals[1]:Goals[0];
+
         JOptionPane.showOptionDialog(null, "第"+(GameProcess+1)+"关" + "\n"
-                        + "击碎墙体有5%掉落血包" + "\n"
-                        + "目标:存活并击败所有敌人" + "\n"
+                        + "规则:"+Info1 + "\n"
+                        + "目标:"+s1 + "\n"
                         + " ", "游戏说明",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
                 null, options, null);

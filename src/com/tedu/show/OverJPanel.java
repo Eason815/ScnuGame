@@ -21,7 +21,7 @@ public class OverJPanel extends JPanel {
 
 
         this.setLayout(null);
-        btn = new JButton("重新开始");
+        btn = new JButton("确定");
 //        btn.setFont(new Font("微软雅黑", Font.BOLD, 40));
 //        btn.setBorderPainted(false);
 //        btn.setContentAreaFilled(false);
