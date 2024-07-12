@@ -1,5 +1,6 @@
 package com.tedu.element;
 
+import com.tedu.controller.GameThread;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
 import com.tedu.manager.GameLoad;
@@ -21,7 +22,8 @@ public class Player extends ElementObj {
 
     private int hp = 5;
 
-    private int bulletsNum = 10000;
+    private int bulletsNum = 1000;
+    private int skin = 1;
 
 
     public Player(){}
@@ -33,17 +35,22 @@ public class Player extends ElementObj {
 
     @Override
     public ElementObj createElement(String str){
-        //{x,y,icon,hp,bl}
+        //{x,y,icon,hp,bl,skin}
 
         String[] split = str.split(",");
         this.setX(Integer.parseInt(split[0]));
         this.setY(Integer.parseInt(split[1]));
         ImageIcon icon2 = split.length>2?GameLoad.imgMap.get(split[2]):GameLoad.imgMap.get("up1");
         this.hp = split.length>3?Integer.parseInt(split[3]):5;
-        this.bulletsNum = split.length>4?Integer.parseInt(split[4]):10000;
+        this.bulletsNum = split.length>4?Integer.parseInt(split[4]):1000;
+        this.skin = split.length>5?Integer.parseInt(split[5]):1;
+
+
         this.setW(icon2.getIconWidth());
         this.setH(icon2.getIconHeight());
         this.setIcon(icon2);
+
+
         return this;
     }
 
@@ -66,6 +73,11 @@ public class Player extends ElementObj {
 
         if (b1) {
             this.speed = 1;
+
+            if(this.skin == 2){
+                this.setSpeed(4);
+            }
+
             switch (key) {
                 case 37:
                     this.down = false;
@@ -118,7 +130,7 @@ public class Player extends ElementObj {
                 case 32:
                     if (bulletsNum > 0) {
                         this.atk = false;
-                        this.bulletsNum--;
+
                     }
                     break;
                 case 27:
@@ -157,17 +169,26 @@ public class Player extends ElementObj {
 
         // 检测是否拾取道具
         List<ElementObj> items = ElementManager.getManager().getElementsByKey(GameElement.ITEM);
-        for (ElementObj item : items) {
-            if (this.isCash(item) && item.isLive()) {
-                Item pickedItem = (Item) item;
-                switch (pickedItem.getType()) {
-                    case HEALTH:
-                        this.increaseHP(1);
-                        break;
+        if (!items.isEmpty()) {
+            for (ElementObj item : items) {
+                if (this.isCash(item) && item.isLive()) {
+                    Item pickedItem = (Item) item;
+                    switch (pickedItem.getType()) {
+                        case HEALTH:
+                            this.increaseHP(1);
+                            break;
+                        case AMMUNITION:
+                            this.increaseBL(5);
+                            break;
+                    }
+                    item.setLive(false); // 道具被拾取后消失
                 }
-                item.setLive(false); // 道具被拾取后消失
             }
         }
+    }
+
+    private void increaseBL(int i) {
+        this.bulletsNum += i;
     }
 
     private void increaseHP(int i) {
@@ -180,15 +201,17 @@ public class Player extends ElementObj {
         ElementManager em = ElementManager.getManager();
         Map<GameElement, List<ElementObj>> all = em.getGameElements();
         List<ElementObj> maps = em.getElementsByKey(GameElement.MAPS);
-        for (ElementObj map : maps) {
-            if (newX < map.getX() + map.getIcon().getIconWidth() &&
-                    newX + this.getW() > map.getX() &&
-                    newY < map.getY() + map.getIcon().getIconHeight() &&
-                    newY + this.getH() > map.getY() &&
-                    !(map.getName().equals("GRASS"))
+        if(!maps.isEmpty()) {
+            for (ElementObj map : maps) {
+                if (newX < map.getX() + map.getIcon().getIconWidth() &&
+                        newX + this.getW() > map.getX() &&
+                        newY < map.getY() + map.getIcon().getIconHeight() &&
+                        newY + this.getH() > map.getY() &&
+                        !(map.getName().equals("GRASS"))
 
-            ) {
-                return true; // 发生碰撞
+                ) {
+                    return true; // 发生碰撞
+                }
             }
         }
         return false; // 没有发生碰撞
@@ -196,7 +219,8 @@ public class Player extends ElementObj {
 
     @Override
     public void updateImg(long GameTime) {
-        this.setIcon(GameLoad.imgMap.get(fx));
+        if (skin==1)
+            this.setIcon(GameLoad.imgMap.get(fx));
     }
 
     @Override
@@ -207,13 +231,17 @@ public class Player extends ElementObj {
         this.atk = false;
         ElementObj obj = new Bullet().createElement(this.toString());
         ElementManager.getManager().addElement(obj, GameElement.BULLET);
-
+        this.bulletsNum--;
     }
 
     @Override
     public String toString() {// 类似使用JSON传递数据
         int x = this.getX();
         int y = this.getY();
+
+        if (GameThread.GameProcess==GameThread.FlyLevel)
+            this.fx = "right";
+
         switch (this.fx) {
             case "left":
                 y += 12;

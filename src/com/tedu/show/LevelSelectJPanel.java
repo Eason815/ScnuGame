@@ -39,20 +39,26 @@ public class LevelSelectJPanel extends JPanel {
 
 
         btn1 = new JButton("第一关");
-        customizeButton(btn1,icon,155,280,90,45,16,1);
+        customizeButton(btn1,icon,155,300,90,45,16,1);
 
         btn2 = new JButton("第二关");
-        customizeButton(btn2,icon,275,280,90,45,16,2);
+        customizeButton(btn2,icon,275,300,90,45,16,2);
 
         btn3 = new JButton("第三关");
-        customizeButton(btn3,icon,395,280,90,45,16,3);
+        customizeButton(btn3,icon,395,300,90,45,16,3);
 
+        btn4 = new JButton("第四关");
+        customizeButton(btn4,icon,515,300,90,45,16,4);
 
+        btn5 = new JButton("第五关");
+        customizeButton(btn5,icon,635,300,90,45,16,5);
 
         this.add(jl);
         this.add(btn1);
         this.add(btn2);
         this.add(btn3);
+        this.add(btn4);
+        this.add(btn5);
     }
 
     private void customizeButton(JButton button, ImageIcon icon, int x, int y, int width, int height,int fontSize,int num) {

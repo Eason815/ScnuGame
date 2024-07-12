@@ -4,7 +4,8 @@ import java.awt.*;
 
 public class Item extends ElementObj {
     public enum ItemType {
-        HEALTH  //道具1 血包
+        HEALTH,  //道具1 血包
+        AMMUNITION //道具2 弹药
     }
 
     private ItemType type;
@@ -27,7 +28,11 @@ public class Item extends ElementObj {
     @Override
     public void showElement(Graphics g) {
         if (this.isLive()) {
-            g.setColor(Color.GREEN); // 可以根据不同的道具类型设置不同的颜色
+            if (type == ItemType.HEALTH) {
+                g.setColor(Color.GREEN);
+            } else if (type == ItemType.AMMUNITION) {
+                g.setColor(Color.ORANGE);
+            }
             g.fillRect(this.getX(), this.getY(), 20, 20); // 简单的矩形表示道具
         }
     }

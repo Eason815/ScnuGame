@@ -143,4 +143,8 @@ public abstract class ElementObj {
 //        this.x += this.speed;
 //        this.y += this.speed;
 //    }
+
+    public boolean checkCash1(int newX,int newY,ElementObj map){
+        return false;
+    }
 }

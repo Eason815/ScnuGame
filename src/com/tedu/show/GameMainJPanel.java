@@ -4,6 +4,7 @@ import com.tedu.controller.GameThread;
 import com.tedu.element.ElementObj;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
+import com.tedu.manager.GameLoad;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,7 +28,10 @@ public class GameMainJPanel extends JPanel implements Runnable{
     @Override
     public void paint(Graphics g){
         super.paint(g);
-
+        if(GameThread.GameProcess==GameThread.FlyLevel){
+            ImageIcon icon = GameLoad.imgMap.get("beach");
+            g.drawImage(icon.getImage(), 0, 0, icon.getIconWidth(), 600, null);
+        }
 //        Map<GameElement, List<ElementObj>> all = em.getGameElements();
 
         // 创建集合的副本

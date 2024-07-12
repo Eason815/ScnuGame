@@ -21,6 +21,11 @@ public class GameLoad {
 
     public static void MapLoad(int mapId) {
 
+        if(GameThread.GameProcess==GameThread.FlyLevel){
+
+            return;
+        }
+
         String mapName="com/tedu/text/"+mapId+".map";
 
         ClassLoader classLoader = GameLoad.class.getClassLoader();
@@ -75,11 +80,17 @@ public class GameLoad {
 
     public static void loadPlay() {
         loadObj();
-        int [] hps = {1,1,2};
-        int [] bls = {10000,10000,30};
-        String playStr="500,500,up,"+
-                hps[GameThread.GameProcess]+","+
-                bls[GameThread.GameProcess];
+        String playStr="";
+        if(GameThread.GameProcess==GameThread.FlyLevel)
+            playStr = "100,100,right2,6,10000,2";
+        else {
+            int[] hps = {1, 1, 2, 2};
+            int[] bls = {1000, 30, 30, 20};
+            playStr = "500,500,up," +
+                    hps[GameThread.GameProcess] + "," +
+                    bls[GameThread.GameProcess] + "," +
+                    "1";
+        }
         ElementObj obj=getObj("play");
         ElementObj play = obj.createElement(playStr);
 //		ElementObj play = new Play().createElement(playStr);
@@ -120,6 +131,26 @@ public class GameLoad {
                 em.addElement(enemy, GameElement.ENEMY);
             }
 
+        }else if(mode==3){
+            for (int i = 0; i < 5; i++) {
+                ElementObj obj = getObj("enemy");
+                ElementObj enemy = obj.createElement("right,1");
+                em.addElement(enemy, GameElement.ENEMY);
+            }
+            for (int i = 0; i < 5; i++) {
+                ElementObj obj = getObj("enemy");
+                ElementObj enemy = obj.createElement("up,2");
+                em.addElement(enemy, GameElement.ENEMY);
+            }
+        }
+        else if(mode==4){
+            int enemyCount = 1;
+
+            for (int i = 0; i < enemyCount; i++) {
+                ElementObj obj = getObj("enemy");
+                ElementObj enemy = obj.createElement("left,3"); // 假设窗体宽度为900，敌军飞机出现在850的位置
+                em.addElement(enemy, GameElement.ENEMY);
+            }
         }
     }
 

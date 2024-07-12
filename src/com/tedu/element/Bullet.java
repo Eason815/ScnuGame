@@ -1,5 +1,8 @@
 package com.tedu.element;
 
+import com.tedu.controller.GameThread;
+import com.tedu.manager.GameLoad;
+
 import java.awt.*;
 
 public class Bullet extends ElementObj {
@@ -41,14 +44,17 @@ public class Bullet extends ElementObj {
         this.setW(10);
         this.setH(10);
 
+        this.setIcon(GameLoad.imgMap.get("bullet"));
+
         return this;
 
     }
 
     @Override
     public void showElement(Graphics g) {
-        g.setColor(Color.RED);
-        g.fillOval(this.getX(), this.getY(), this.getW(), this.getH());
+//        g.setColor(Color.RED);
+//        g.fillOval(this.getX(), this.getY(), this.getW(), this.getH());
+        g.drawImage(this.getIcon().getImage(), this.getX(), this.getY(), this.getIcon().getIconWidth(), this.getIcon().getIconHeight(), null);
 
     }
 
@@ -57,6 +63,8 @@ public class Bullet extends ElementObj {
 
         this.speed = 3;
 
+        if(GameThread.GameProcess==GameThread.FlyLevel)
+            this.speed = 5;
         int x = this.getX();
         int y = this.getY();
         if (x < 0 || y < 0 || x > 800 || y > 600) {

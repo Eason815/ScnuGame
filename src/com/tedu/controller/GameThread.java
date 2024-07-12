@@ -19,9 +19,10 @@ public class GameThread extends Thread{
     private ElementManager em;
 
     public static int Score = 0;
-    public static int GameProcess = 2;
-
+    public static int GameProcess = 0;
     public static int EndStat=0;
+
+    public static int FlyLevel = 4;//0 1 2 3
     public GameThread(int Process) {
         GameProcess = Process;
         Score = 0;
@@ -46,7 +47,7 @@ public class GameThread extends Thread{
         GameLoad.MapLoad(GameProcess + 1);
         GameLoad.loadPlay();
         GameLoad.loadEnemy(GameProcess);
-        if(GameProcess>1)
+        if(GameProcess==3)
             GameLoad.loadMask();
 
     }
@@ -56,6 +57,8 @@ public class GameThread extends Thread{
         EndStat = 0;// 初始化
         InfoAndGoal();
 
+        long lastTime = 0; //记录上次生成敌军的时间
+        long enemyInterval = 100; //敌军生成间隔
         while (true) {
             Map<GameElement, List<ElementObj>> all = em.getGameElements();
             List<ElementObj> emeries = em.getElementsByKey(GameElement.ENEMY);
@@ -63,7 +66,7 @@ public class GameThread extends Thread{
             List<ElementObj> maps = em.getElementsByKey(GameElement.MAPS);
             List<ElementObj> players = em.getElementsByKey(GameElement.PLAY);
 
-            if (CheckNoEnemy(all)) {
+            if (CheckWin(all)) {
                 EndStat = 1;// 游戏胜利
                 break;
             }
@@ -76,10 +79,14 @@ public class GameThread extends Thread{
             CheckCrash(players, emeries);
 
 
-
+            // 每隔一段时间生成新的敌军
+            if (GameProcess==FlyLevel && System.currentTimeMillis() - lastTime > enemyInterval) {
+                GameLoad.loadEnemy(GameProcess);
+                lastTime = System.currentTimeMillis();
+            }
 
             GameTime++;
-
+//            System.out.println(GameTime);
             try {
                 sleep(10);
             } catch (InterruptedException e) {
@@ -150,8 +157,10 @@ public class GameThread extends Thread{
         }
 
     }
-    private static boolean CheckNoEnemy(Map<GameElement, List<ElementObj>> all) {
-        return all.get(GameElement.ENEMY).isEmpty();
+    private static boolean CheckWin(Map<GameElement, List<ElementObj>> all) {
+        if(all.get(GameElement.ENEMY).isEmpty() && GameProcess!=FlyLevel)
+            return true;
+        else return Score >= 200;
     }
 
     private static boolean CheckFailed(Map<GameElement, List<ElementObj>> all) {
@@ -173,13 +182,16 @@ public class GameThread extends Thread{
     private void InfoAndGoal(){
         Object[] options = { "确定" };
 
-        String [] Info = {"1 击碎墙体有5%掉落血包","\n2 击碎墙体有5%触发激光束陷阱","\n3 弹药紧缺 视野受阻!"};
+        String [] Info = {"1 击碎墙体有5%掉落血包","\n2 击碎墙体有15%掉落弹药补给","\n3 击碎墙体有5%触发激光束陷阱","\n4 视野受阻!"};
         StringBuilder Info1= new StringBuilder();
-        for (int i = 0;i<GameProcess+1;i++)
-            Info1.append(Info[i]);
+        if (GameProcess==FlyLevel) Info1.append("飞机大战来临！");
+        else {
+            for (int i = 0; i < GameProcess + 1; i++)
+                Info1.append(Info[i]);
+        }
 
-        String [] Goals = {"存活并击败所有敌人","得分30"};
-        String s1 = GameProcess==4?Goals[1]:Goals[0];
+        String [] Goals = {"存活并击败所有敌人","得分200"};
+        String s1 = GameProcess==(FlyLevel)?Goals[1]:Goals[0];
 
         JOptionPane.showOptionDialog(null, "第"+(GameProcess+1)+"关" + "\n"
                         + "规则:"+Info1 + "\n"
@@ -234,7 +246,7 @@ public class GameThread extends Thread{
 //
 //        }
         // 清空元素管理器
-        ElementManager.getManager().clearAll();
+        em.clearElements();
         GameJFrame.setJPanel("OverJPanel");
 
 
