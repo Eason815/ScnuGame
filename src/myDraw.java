@@ -10,12 +10,12 @@ import java.awt.*;
  */
 public class myDraw {
     public static void main(String[] args) {
-        new SolarSystem();
+        new Drawing();
     }
 }
 
-class SolarSystem extends JFrame {
-    public SolarSystem() {
+class Drawing extends JFrame {
+    public Drawing() {
         setLayout(null);
         setBounds(100, 100, 600, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);

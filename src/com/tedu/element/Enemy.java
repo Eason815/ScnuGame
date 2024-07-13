@@ -47,7 +47,7 @@ public class Enemy extends ElementObj {
         int y = new Random().nextInt(500);
         if (this.moveMode == 3){
             x = 788;
-            y = new Random().nextInt(520) + 40;
+            y = new Random().nextInt(400) + 60;
             this.trend = y%2;
         }
         else {
@@ -80,7 +80,8 @@ public class Enemy extends ElementObj {
         int moveDirection = 0;
         inDanger = false;
         for (ElementObj obj : em.getElementsByKey(GameElement.BULLET)) {
-            if (obj instanceof Bullet bullet) {
+            if (obj instanceof Bullet) {
+                Bullet bullet = (Bullet)obj;
                 if (isBulletThreat(bullet)) {
                     inDanger = true;
                     LockTime = GameTime + 100;// 紧急争用期
@@ -117,16 +118,16 @@ public class Enemy extends ElementObj {
     private void moveInDirection(int direction) {
         // 检查垂直方向是否有障碍物并移动
         switch (direction) {
-            case 0 -> { // 向左
+            case 0 : { // 向左
                 this.fx = "left"; break;
             }
-            case 1 -> { // 向右
+            case 1 : { // 向右
                 this.fx = "right"; break;
             }
-            case 2 -> { // 向上
+            case 2 : { // 向上
                 this.fx ="up"; break;
             }
-            case 3 -> { // 向下
+            case 3 : { // 向下
                 this.fx="down"; break;
             }
         }

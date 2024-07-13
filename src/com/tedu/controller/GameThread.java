@@ -32,12 +32,12 @@ public class GameThread extends Thread{
 
     @Override
     public void run() {
-            //游戏开始前
-            gameLoad();
-            //游戏进行时
-            gameRun();
-            //游戏场景结束
-            gameOver();
+        //游戏开始前
+        gameLoad();
+        //游戏进行时
+        gameRun();
+        //游戏场景结束
+        gameOver();
     }
 
     private void gameLoad() {
@@ -58,7 +58,7 @@ public class GameThread extends Thread{
         InfoAndGoal();
 
         long lastTime = 0; //记录上次生成敌军的时间
-        long enemyInterval = 100; //敌军生成间隔
+        long enemyInterval = 500; //敌军生成间隔
         while (true) {
             Map<GameElement, List<ElementObj>> all = em.getGameElements();
             List<ElementObj> emeries = em.getElementsByKey(GameElement.ENEMY);
@@ -148,7 +148,9 @@ public class GameThread extends Thread{
         List<ElementObj> masks = all.get(GameElement.MASK);
         for (ElementObj obj : player) {
             for (ElementObj mask : masks) {
-                if ((obj instanceof Player p1) && (mask instanceof Mask m1)) {
+                if ((obj instanceof Player) && (mask instanceof Mask)) {
+                    Player p1 = (Player) obj;
+                    Mask m1 = (Mask) mask;
                     m1.setX(p1.getX()-Mask.wid/2);
                     m1.setY(p1.getY()-Mask.wid/2);
 //                    System.out.println(1111);
@@ -169,8 +171,10 @@ public class GameThread extends Thread{
             return true;
 
         for(ElementObj obj: player) {
-            if(!(obj instanceof Player object))
+            if(!(obj instanceof Player)) {
                 break;
+            }
+            Player object = (Player) obj;
             if (object.getBulletsNum()==0)
                 return true;
         }
@@ -201,57 +205,12 @@ public class GameThread extends Thread{
                 null, options, null);
     }
 
-    private static void FiveSecondLoad(String inputStr) {
-        for (int i = 5; i > 0; i--) {
-            int remainingTime = i;
-            JOptionPane pane = new JOptionPane("您的得分为：" + Score + "\n剩余" + remainingTime + "秒" + "\n" + inputStr,
-                    JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[] {}, null);
 
-            JDialog dialog = pane.createDialog("关卡倒计时");
-
-            Timer timer = new Timer(1000, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    dialog.dispose();
-                }
-            });
-
-            timer.setRepeats(false);
-            timer.start();
-            dialog.setVisible(true);
-        }
-    }
 
     private void gameOver() {
 
-        // 显示游戏结束
-
-//        if(EndStat==1) {
-//            switch (GameProcess++) {
-//
-//                case 0:
-//                    FiveSecondLoad("即将进入下一关\n敌人增多");
-//                    break;
-//                case 1:
-//                    FiveSecondLoad("即将进入下一关\n激光束");
-//                    break;
-//
-//                case 2:
-//                    FiveSecondLoad("游戏结束");
-//                    System.exit(0);
-//
-//            }
-//        } else if (EndStat==2) {
-//            FiveSecondLoad("游戏失败 将重新开始第"+(GameProcess+1)+"关");
-//
-//        }
-        // 清空元素管理器
         em.clearElements();
         GameJFrame.setJPanel("OverJPanel");
-
-
-//        Score=0;
-//        EndStat=0;
 
 
     }
