@@ -162,7 +162,7 @@ public class GameThread extends Thread{
     private static boolean CheckWin(Map<GameElement, List<ElementObj>> all) {
         if(all.get(GameElement.ENEMY).isEmpty() && GameProcess!=FlyLevel)
             return true;
-        else return Score >= 200;
+        else return Score >= 150;
     }
 
     private static boolean CheckFailed(Map<GameElement, List<ElementObj>> all) {
@@ -186,7 +186,7 @@ public class GameThread extends Thread{
     private void InfoAndGoal(){
         Object[] options = { "确定" };
 
-        String [] Info = {"1 击碎墙体有5%掉落血包","\n2 击碎墙体有15%掉落弹药补给","\n3 击碎墙体有5%触发激光束陷阱","\n4 视野受阻!"};
+        String [] Info = {"1 击碎墙体有5%掉落血包(绿色)","\n2 击碎墙体有15%掉落弹药补给(橙色)","\n3 击碎墙体有5%触发激光束陷阱(红色)","\n4 视野受阻!"};
         StringBuilder Info1= new StringBuilder();
         if (GameProcess==FlyLevel) Info1.append("飞机大战来临！");
         else {
@@ -194,7 +194,7 @@ public class GameThread extends Thread{
                 Info1.append(Info[i]);
         }
 
-        String [] Goals = {"存活并击败所有敌人","得分200"};
+        String [] Goals = {"存活并击败所有敌人","得分150"};
         String s1 = GameProcess==(FlyLevel)?Goals[1]:Goals[0];
 
         JOptionPane.showOptionDialog(null, "第"+(GameProcess+1)+"关" + "\n"

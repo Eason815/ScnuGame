@@ -321,7 +321,7 @@ public class Enemy extends ElementObj {
     private boolean isBulletThreat(Bullet bullet) {
         int dx = bullet.getX() - this.getX();
         int dy = bullet.getY() - this.getY();
-        return Math.sqrt(dx * dx + dy * dy) < 100; // 检测子弹威胁半径
+        return Math.sqrt(dx * dx + dy * dy) < 100 && bullet.isFromPlayer(); // 检测子弹威胁半径
     }
 
 
