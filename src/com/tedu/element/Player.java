@@ -265,11 +265,6 @@ public class Player extends ElementObj {
     }
 
     @Override
-    public void stopMovement() {
-        this.speed = 0;
-    }
-
-    @Override
     public void setLive(boolean live) {
 
         this.hp--;
@@ -282,9 +277,5 @@ public class Player extends ElementObj {
 
     public int getBulletsNum() {
         return bulletsNum;
-    }
-
-    public void setBulletsNum(int bulletsNum) {
-        this.bulletsNum = bulletsNum;
     }
 }

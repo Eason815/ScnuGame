@@ -4,7 +4,6 @@ import com.tedu.controller.GameThread;
 import com.tedu.manager.ElementManager;
 import com.tedu.manager.GameElement;
 import com.tedu.manager.GameLoad;
-import com.tedu.show.SoundPlayer;
 
 
 import javax.swing.*;
@@ -193,11 +192,7 @@ public class Enemy extends ElementObj {
                 else
                     this.trend=1;
             }
-
         }
-
-
-
     }
 
 
@@ -267,11 +262,10 @@ public class Enemy extends ElementObj {
             if (score == 0)
                 return;
             else if(score < 5) {
-                String path = "sound/"+score+".wav";
-                new SoundPlayer(path).play();
+                GameLoad.play(GameLoad.soundMap.get(String.valueOf(score)));
             }
             else
-                new SoundPlayer("sound/5.wav").play();
+                GameLoad.play(GameLoad.soundMap.get("5"));
         }
     }
 

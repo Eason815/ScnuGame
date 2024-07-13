@@ -5,7 +5,10 @@ import com.tedu.element.ElementObj;
 import com.tedu.element.MapObj;
 import com.tedu.element.Mask;
 
+
+import javax.sound.sampled.*;
 import javax.swing.*;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -16,7 +19,8 @@ public class GameLoad {
 
     private static ElementManager em=ElementManager.getManager();
     public static Map<String,ImageIcon> imgMap = new HashMap<>();
-    public static Map<String,List<ImageIcon>> imgMaps;
+
+    public static Map<String, Clip> soundMap = new HashMap<>();
     private static Properties pro =new Properties();
 
     public static void MapLoad(int mapId) {
@@ -75,6 +79,47 @@ public class GameLoad {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }
+    }
+
+    public static void loadMAV(){
+        String texturl="com/tedu/text/MAV.pro";//文件的命名可以更加有规律
+        ClassLoader classLoader = GameLoad.class.getClassLoader();
+        InputStream texts = classLoader.getResourceAsStream(texturl);
+
+        pro.clear();
+        try {
+            pro.load(texts);
+            Set<Object> set = pro.keySet();
+            for(Object o:set) {
+                String url=pro.getProperty(o.toString());
+                soundMap.put(o.toString(), SoundPlayer(url));
+            }
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public static Clip SoundPlayer(String filePath) {
+        Clip clip = null;
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filePath));
+            clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
+        return clip;
+    }
+
+    public static void play(Clip clip) {
+        if (clip != null) {
+            clip.setFramePosition(0); // 从头开始播放
+            clip.start();
         }
     }
 

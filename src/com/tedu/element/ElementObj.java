@@ -117,7 +117,6 @@ public abstract class ElementObj {
         this.live = live;
     }
 
-
     public int getSpeed() {
         return speed;
     }
@@ -126,23 +125,9 @@ public abstract class ElementObj {
         this.speed = speed;
     }
 
-
     public String getName() {
         return name;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void stopMovement() {
-        this.speed=0;
-    }
-
-//    public void updatePosition() {
-//        this.x += this.speed;
-//        this.y += this.speed;
-//    }
 
     public boolean checkCash1(int newX,int newY,ElementObj map){
         return false;

@@ -18,23 +18,8 @@ public class OverJPanel extends JPanel {
 
     public OverJPanel() {
 
-
-
         this.setLayout(null);
         btn = new JButton("确定");
-//        btn.setFont(new Font("微软雅黑", Font.BOLD, 40));
-//        btn.setBorderPainted(false);
-//        btn.setContentAreaFilled(false);
-//        btn.setBounds(250, 200, 200, 100);
-//
-//
-//        btn.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                GameJFrame.setJPanel("MainJPanel");
-//            }
-//        });
-
         customizeButton(btn, GameLoad.imgMap.get("button"), 350, 400, 200, 100, 20);
 
         btn.addActionListener(new ActionListener() {

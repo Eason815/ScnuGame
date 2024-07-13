@@ -11,10 +11,8 @@ import java.util.Random;
 public class MapObj extends ElementObj{
 
     private int hp;
-
     private String name;
 //    private final int speed=0;
-
 
     public void showElement(Graphics g){
         g.drawImage(this.getIcon().getImage(),this.getX(),this.getY(),this.getW(),this.getH(),null);

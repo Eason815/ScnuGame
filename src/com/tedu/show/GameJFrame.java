@@ -121,14 +121,6 @@ public class GameJFrame extends JFrame {
         this.keyListener = keyListener;
     }
 
-    public void setMouseListener(MouseListener mouseListener) {
-        this.mouseListener = mouseListener;
-    }
-
-    public void setMouseMotionListener(MouseMotionListener mouseMotionListener) {
-        this.mouseMotionListener = mouseMotionListener;
-    }
-
     public void setThread(Thread thread) {
         this.thread = thread;
     }

@@ -51,10 +51,10 @@ public class StartJPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Object[] options = { "确定" };
-                JOptionPane.showOptionDialog(null, "<html><body><tr>Player1: 上下左右wasd, space发射弹药</tr>"
-                                + "<tr></tr>"
-                                + "<tr>泡泡: 增加泡泡的放置数量</tr>"
-                                + "<tr>药水: 增加泡泡的范围</tr></body></html>", "游戏说明",
+                JOptionPane.showOptionDialog(null, "<html><body><tr>操作: 上左下右wasd, space发射弹药，Esc退出游戏</tr>"
+                                + "<tr>与敌人碰撞hp-1，敌人消失</tr>"
+                                + "<tr>血包:生命值hp+1</tr>"
+                                + "<tr>弹药:子弹数bl+5</tr></body></html>", "游戏说明",
                         JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
                         null, options, null);
             }

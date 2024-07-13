@@ -44,6 +44,7 @@ public class GameThread extends Thread{
 
         em.clearElements();
         GameLoad.loadImg();
+        GameLoad.loadMAV();
         GameLoad.MapLoad(GameProcess + 1);
         GameLoad.loadPlay();
         GameLoad.loadEnemy(GameProcess);
@@ -205,16 +206,10 @@ public class GameThread extends Thread{
                 null, options, null);
     }
 
-
-
     private void gameOver() {
 
         em.clearElements();
         GameJFrame.setJPanel("OverJPanel");
-
-
     }
-
-
 
 }
