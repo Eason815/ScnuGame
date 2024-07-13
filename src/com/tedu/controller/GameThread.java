@@ -59,7 +59,7 @@ public class GameThread extends Thread{
         InfoAndGoal();
 
         long lastTime = 0; //记录上次生成敌军的时间
-        long enemyInterval = 500; //敌军生成间隔
+        long enemyInterval = 300; //敌军生成间隔
         while (true) {
             Map<GameElement, List<ElementObj>> all = em.getGameElements();
             List<ElementObj> emeries = em.getElementsByKey(GameElement.ENEMY);
@@ -163,7 +163,7 @@ public class GameThread extends Thread{
     private static boolean CheckWin(Map<GameElement, List<ElementObj>> all) {
         if(all.get(GameElement.ENEMY).isEmpty() && GameProcess!=FlyLevel)
             return true;
-        else return Score >= 150;
+        else return Score >= 100;
     }
 
     private static boolean CheckFailed(Map<GameElement, List<ElementObj>> all) {
@@ -195,7 +195,7 @@ public class GameThread extends Thread{
                 Info1.append(Info[i]);
         }
 
-        String [] Goals = {"存活并击败所有敌人","得分150"};
+        String [] Goals = {"存活并击败所有敌人","得分100"};
         String s1 = GameProcess==(FlyLevel)?Goals[1]:Goals[0];
 
         JOptionPane.showOptionDialog(null, "第"+(GameProcess+1)+"关" + "\n"

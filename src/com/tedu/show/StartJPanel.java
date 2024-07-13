@@ -52,7 +52,7 @@ public class StartJPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 Object[] options = { "确定" };
                 JOptionPane.showOptionDialog(null, "<html><body><tr>操作: 上左下右wasd, space发射弹药，Esc退出游戏</tr>"
-                                + "<tr>与敌人碰撞hp-1，敌人消失</tr>"
+                                + "<tr>与敌人,激光束碰撞hp-1，敌人消失</tr>"
                                 + "<tr>血包:生命值hp+1</tr>"
                                 + "<tr>弹药:子弹数bl+5</tr></body></html>", "游戏说明",
                         JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
